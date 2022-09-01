@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useRef, useCallback} from 'react';
 import {
   FlatList,
   SafeAreaView,
@@ -29,6 +29,26 @@ const ImageH = height * 1.54;
 
 const App = () => {
   const scrollX = useRef(new Animated.Value(0)).current;
+
+  const renderItem = useCallback(({item})=>{
+    return (
+      <View
+        style={{width, justifyContent: 'center', alignItems: 'center'}}>
+        <Image
+          source={{
+            uri: item,
+          }}
+          style={{
+            width: ImageW,
+            height: ImageH / 2,
+            resizeMode: 'cover',
+            borderRadius: 16,
+          }}
+        />
+      </View>
+    );
+
+  },[])
 
   return (
     <View style={{flex: 1, backgroundColor: '#000'}}>
@@ -69,24 +89,7 @@ const App = () => {
           {useNativeDriver: true},
         )}
         keyExtractor={(_, index) => index.toString()}
-        renderItem={({item}) => {
-          return (
-            <View
-              style={{width, justifyContent: 'center', alignItems: 'center'}}>
-              <Image
-                source={{
-                  uri: item,
-                }}
-                style={{
-                  width: ImageW,
-                  height: ImageH / 2,
-                  resizeMode: 'cover',
-                  borderRadius: 16,
-                }}
-              />
-            </View>
-          );
-        }}
+        renderItem={renderItem}
       />
     </View>
   );
